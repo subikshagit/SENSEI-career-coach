@@ -70,3 +70,17 @@ export const coverLetterSchema = z.object({
   jobTitle: z.string().min(1, "Job title is required"),
   jobDescription: z.string().min(1, "Job description is required"),
 });
+
+export const entriesToMarkdown = (entries, title) => {
+  if (!entries || entries.length === 0) return "";
+  return `## ${title}\n\n${entries.map((entry) => {
+    const start = entry.startDate ? new Date(entry.startDate).getFullYear() : "";
+    const end = entry.current
+      ? "Present"
+      : entry.endDate
+        ? new Date(entry.endDate).getFullYear()
+        : "";
+    const date = start && end ? `${start} - ${end}` : start || end;
+    return `### ${entry.title} at ${entry.organization}\n${date ? `*${date}*\n\n` : ""}${entry.description}`;
+  }).join("\n\n")}`;
+};
